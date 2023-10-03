@@ -22,7 +22,6 @@ export default function HeaderChild({itemKey, label, active, orderBy, updateSort
         } else {
             rotateIcon = 90
         }
-        console.log('rotate icon of!', itemKey, rotateIcon) 
     }
 
     // console.log(active, itemKey)

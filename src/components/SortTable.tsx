@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HeaderChild from "./HeaderChild";
+import data from '../data.json'; // Adjust the path as needed
 
 //--START-- for definition of types
 export type userDataType = {
@@ -11,14 +12,14 @@ export type userDataType = {
     ip_address: string;
 }
 
-export type SortTableProps = {
-    data: userDataType[]
-}
 //--END--
 
-export default function SortTable({data}: SortTableProps) {
-    const [keyToSort, setKeyToSort] = useState<string>('first_name')
+const list_of_users: userDataType[] = data as userDataType[]
+
+export default function SortTable() {
+    const [keyToSort, setKeyToSort] = useState<string>('id')
     const [orderBy, setOrderBy] = useState<'ascend'|'descend'>('ascend')
+    const [finalList, setFinalList] = useState(list_of_users)
 
     const headers = [
         {key:'id', label:'ID'},
@@ -29,15 +30,29 @@ export default function SortTable({data}: SortTableProps) {
         {key:'ip_address', label:'ip address'},
     ]
 
+    useEffect(() => {
+        const array_of_keys: (string|number)[] = [] 
+        const object_of_keys = []
+        const final_based_on_sort = []
+
+        finalList.forEach(item => {
+            // @ts-ignore
+            array_of_keys.push(item[keyToSort])
+        })
+
+        console.log(array_of_keys)
+        return () => {}
+    }, [keyToSort, orderBy])
+
     return (
         <div className="">
             <div className="py-5 pb-2 flex justify-between">
-                {headers.map(item => <HeaderChild active={keyToSort} itemKey={item.key} label={item.label} orderBy={orderBy} updateSort={setKeyToSort} updateOrderBy={setOrderBy} />)}
+                {headers.map((item, index) => <HeaderChild key={index} active={keyToSort} itemKey={item.key} label={item.label} orderBy={orderBy} updateSort={setKeyToSort} updateOrderBy={setOrderBy} />)}
             </div>
 
             {/* below we display all of the user's info */}
             <div className="">
-                {data.map(item => {
+                {finalList.map(item => {
                     return (
                         <div className="flex justify-between" key={item.id}>
                             <div className="border border-indigo-900 w-full px-5 py-4">{item.id}</div>
