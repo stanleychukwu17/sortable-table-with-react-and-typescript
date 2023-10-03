@@ -1,6 +1,5 @@
 import { useState } from "react";
 import HeaderChild from "./HeaderChild";
-import { BsFillCaretRightFill } from 'react-icons/bs'
 
 //--START-- for definition of types
 export type userDataType = {
@@ -18,8 +17,8 @@ export type SortTableProps = {
 //--END--
 
 export default function SortTable({data}: SortTableProps) {
-    const [keyToSort, setKeyToSort] = useState<string>('')
-    const [orderBy, setOrderBy] = useState<'ascn'|'descn'|''>('')
+    const [keyToSort, setKeyToSort] = useState<string>('first_name')
+    const [orderBy, setOrderBy] = useState<'ascend'|'descend'>('ascend')
 
     const headers = [
         {key:'id', label:'ID'},
@@ -33,11 +32,7 @@ export default function SortTable({data}: SortTableProps) {
     return (
         <div className="">
             <div className="py-5 pb-2 flex justify-between">
-                {headers.map(item => {
-                    return (
-                        <HeaderChild active key={item.key} label={item.label} />
-                    )
-                })}
+                {headers.map(item => <HeaderChild active={keyToSort} itemKey={item.key} label={item.label} orderBy={orderBy} updateSort={setKeyToSort} updateOrderBy={setOrderBy} />)}
             </div>
 
             {/* below we display all of the user's info */}
